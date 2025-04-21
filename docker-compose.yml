@@ -1,0 +1,32 @@
+services:
+  client:
+    build: ./client
+    ports:
+      - '3000:3000'
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000/
+    depends_on:
+      - server
+
+  server:
+    build: ./server
+    ports:
+      - '5000:5000'
+    environment:
+      - HTTP_PORT=5000
+      - DATABASE_URL=mongodb://mongo:27017/nawy
+      - PUBLIC_GATEWAY_URL=coral-immediate-meerkat-897.mypinata.cloud
+      - PINATA_API_KEY=35b9838b25b17a391cc9
+      - PINATA_SECRET_API_KEY=f858674b069ec4b523f8227ccc822bbd7cdd84f76188ea557661b083807fce90
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
